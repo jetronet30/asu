@@ -1,0 +1,49 @@
+# ==============================
+# 🚀 SUPER STABLE SERVER BUILD
+# Ubuntu Server / Headless / YOLO
+# ==============================
+
+# === PyInstaller ===
+altgraph==0.17.4
+packaging==25.0
+pefile==2023.2.7
+pyinstaller==6.16.0
+pyinstaller-hooks-contrib==2025.9
+pywin32-ctypes==0.2.3
+
+# === YOLOv8 ===
+ultralytics==8.4.23
+lapx>=0.5.12
+
+# === OpenCV (HEADLESS ✅) ===
+opencv-python-headless==4.9.0.80
+
+# === NumPy (CRITICAL FIX ⚠️) ===
+numpy==1.26.4
+
+# === PyTorch CPU-only ===
+torch==2.6.0+cpu
+torchvision==0.21.0+cpu
+torchaudio==2.6.0+cpu
+--extra-index-url https://download.pytorch.org/whl/cpu
+
+# === Transformers / OCR ===
+transformers==4.45.2
+sentencepiece>=0.2.0
+tokenizers>=0.19.1
+
+# === Imaging ===
+Pillow>=10.0.0
+
+# === Utils ===
+regex>=2024.9.11
+tqdm>=4.66.5
+psutil>=5.9.0
+pyyaml>=6.0
+
+# === Optional but recommended ===
+filelock
+fsspec
+safetensors>=0.4.0
+huggingface-hub>=0.23.0
+protobuf>=3.20.3

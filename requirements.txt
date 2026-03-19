@@ -1,0 +1,46 @@
+# requirements.txt – სუპერ სწრაფი CPU-only Sector OCR + PyInstaller (2025 ნოემბერი)
+
+# === PyInstaller და Windows მოდულები ===
+altgraph==0.17.4
+packaging==25.0
+pefile==2023.2.7
+pyinstaller==6.16.0
+pyinstaller-hooks-contrib==2025.9
+pywin32-ctypes==0.2.3
+
+# === YOLOv8 (ultralytics) ===
+ultralytics>=8.3.220
+lapx>=0.5.12      # (lap-ის Windows-compatible fork, YOLO-სთვის აუცილებელი)
+
+# === OpenCV ===
+opencv-python>=4.10.0.84
+
+# === NumPy (PyInstaller-თან სტაბილური დიაპაზონი) ===
+numpy>=2.0.0,<2.3.0
+
+# === PyTorch CPU-only (უახლესი სტაბილური 2025 წლისთვის) ===
+torch==2.6.0+cpu
+torchvision==0.21.0+cpu
+torchaudio==2.6.0+cpu
+--extra-index-url https://download.pytorch.org/whl/cpu
+
+# === Transformers + TrOCR-base (სწრაფი ვერსია large-ის ნაცვლად) ===
+transformers==4.45.2  #  transformers>=4.53.0
+sentencepiece>=0.2.0
+tokenizers>=0.19.1
+
+# === PIL / Pillow ===
+Pillow>=10.0.0
+
+# === სხვა აუცილებელი პაკეტები ===
+regex>=2024.9.11
+tqdm>=4.66.5
+psutil>=5.9.0
+pyyaml>=6.0
+
+# === სურვილისამებრ, მაგრამ ძალიან რეკომენდებული PyInstaller-თან ===
+filelock
+fsspec
+safetensors>=0.4.0
+huggingface-hub>=0.23.0
+protobuf>=3.20.3
