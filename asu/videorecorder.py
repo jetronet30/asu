@@ -12,15 +12,15 @@ video_writer = None
 video_start_time = None
 
 
-def start_recording(frame):
+def start_recording(frame,name):
     global video_writer, video_start_time
     if frame is None or frame.size == 0:
         log.error("❌ ფრეიმი ცარიელია – ჩაწერა ვერ დაიწყო")
         return
 
     h, w = frame.shape[:2]
-    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-    video_path = archive_dir / f"{timestamp}.mp4"
+
+    video_path = archive_dir / f"{name}.mp4"
 
     cmd = [
         'ffmpeg', '-loglevel', 'error', '-y',

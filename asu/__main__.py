@@ -32,13 +32,11 @@ def resource_path(relative_path):
 
 
 # ==================== LOGGING ====================
-log_dir = Path("logs")
-log_dir.mkdir(exist_ok=True)
+
 logging.basicConfig(
     level=logging.INFO,
     format="%(asctime)s | %(levelname)s | %(message)s",
     handlers=[
-        logging.FileHandler(log_dir / f"wagon_tracker_{time.strftime('%Y%m%d')}.log", encoding="utf-8"),
         logging.StreamHandler(sys.stdout)
     ]
 )
@@ -47,18 +45,17 @@ log = logging.getLogger("WAGON_TRACKER")
 
 # ==================== CONFIG ====================
 MODEL_PATH = resource_path("best.pt")
-UNIQUE_WAGON_JSON = "unique_wagons.json"
-TCP_SERVER_IP = "192.168.1.145"
+
+TCP_IDENTIFIER = "5"
+TCP_SERVER_IP = "192.168.1.30"
 TCP_SERVER_PORT = 45000
 RECONNECT_DELAY = 10
 DETECTION_EVERY_N_FRAME = 1
 
 MIN_CONFIDENCE = 0.5
-CONFIDENCE_DISPLAY = MIN_CONFIDENCE
-CONFIDENCE_SAVE = MIN_CONFIDENCE
 
-OBJECT_MIN_WIDTH = 200
-OBJECT_MIN_HEIGHT = 40
+OBJECT_MIN_WIDTH = 300
+OBJECT_MIN_HEIGHT = 70
 
 CAMERAS = [
     {
@@ -158,13 +155,13 @@ class Camera:
                     fc += 1
                     continue
 
-                results = self.model(frame, conf=CONFIDENCE_DISPLAY, imgsz=640, verbose=False)[0]
+                results = self.model(frame, conf=MIN_CONFIDENCE, imgsz=640, verbose=False)[0]
 
                 with self.data_lock:
                     detected_objects = []
                     for box in results.boxes:
                         conf = float(box.conf.item())
-                        if conf < CONFIDENCE_SAVE:
+                        if conf < MIN_CONFIDENCE:
                             continue
 
                         bx1, by1, bx2, by2 = map(int, box.xyxy[0])
@@ -201,18 +198,28 @@ def stream_to_hls():
 
     command = [
         "ffmpeg", "-loglevel", "error", "-y", "-re",
-        "-fflags", "nobuffer+genpts", "-flags", "low_delay",
-        "-thread_queue_size", "256",
+        "-fflags", "genpts+discardcorrupt",          # nobuffer → genpts+discardcorrupt უფრო სტაბილურია
+        "-flags", "low_delay",
+        "-thread_queue_size", "512",
         "-f", "rawvideo", "-pix_fmt", "yuv420p", "-s", "1280x720", "-r", "15", "-i", "-",
-        "-c:v", "libx264", "-preset", "ultrafast", "-tune", "zerolatency",
+        "-c:v", "libx264",
+        "-preset", "veryfast",                       # ultrafast → veryfast (უფრო ზუსტი timing)
+        "-tune", "zerolatency",
         "-profile:v", "main", "-level", "4.0", "-pix_fmt", "yuv420p",
-        "-bf", "0", "-g", "15", "-keyint_min", "15", "-sc_threshold", "0",
+        "-bf", "0",
+        "-g", "30", "-keyint_min", "15",             # GOP 30 (2 წამი) → უკეთესი alignment
+        "-sc_threshold", "0",
         "-b:v", "2800k", "-maxrate", "2800k", "-bufsize", "5600k",
-        "-x264opts", "no-scenecut", "-threads", "1",
-        "-f", "hls", "-hls_time", "1", "-hls_list_size", "3",
-        "-hls_flags", "delete_segments+program_date_time",
-        "-hls_delete_threshold", "1", "-hls_segment_type", "mpegts",
-        "-strftime", "1", "-hls_segment_filename", os.path.join(HLS_DIR, "seg_%Y%m%d_%H%M%S.ts"),
+        "-x264opts", "no-scenecut=1:force-cfr=1",    # force constant frame rate (მნიშვნელოვანია!)
+        "-threads", "1",
+        "-f", "hls",
+        "-hls_time", "1",
+        "-hls_list_size", "2",                       # ცოტა მეტი სეგმენტი playlist-ში
+        "-hls_flags", "delete_segments+program_date_time+split_by_time",
+        "-hls_delete_threshold", "3",
+        "-hls_segment_type", "mpegts",
+        "-strftime", "1",
+        "-hls_segment_filename", os.path.join(HLS_DIR, "seg_%Y%m%d_%H%M%S.ts"),
         hls_playlist_path
     ]
 
@@ -366,11 +373,11 @@ def main():
     Thread(
         target=tcpclient.tcp_client,
         args=(
+            TCP_IDENTIFIER,
             detection_enabled,
             detection_lock,
             reset_all,
             cameras,
-            UNIQUE_WAGON_JSON,
             TCP_SERVER_IP,
             TCP_SERVER_PORT,
             RECONNECT_DELAY,

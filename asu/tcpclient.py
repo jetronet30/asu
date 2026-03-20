@@ -1,20 +1,19 @@
 import socket
 import time
-import json
 import logging
-from datetime import datetime
 
 log = logging.getLogger("WAGON_TRACKER")
 
 from .videorecorder import start_recording, stop_recording
-from .image_saver import ImageSaver
 
 
-image_saver = ImageSaver("number_sectors", clear_on_start=False)
-
-
-def tcp_client(detection_enabled, detection_lock, reset_all_func, cameras, unique_json_path,
+def tcp_client(tcp_identifier, detection_enabled, detection_lock, reset_all_func, cameras,
                tcp_ip, tcp_port, reconnect_delay, running):
+    """
+    TCP კლიენტი, რომელიც ღებულობს ბრძანებებს ფორმატით:
+        <tcp_identifier>_START/ID=some_id
+        <tcp_identifier>_STOP/ID=some_id
+    """
     tcp_socket = None
 
     while running[0]:
@@ -26,71 +25,65 @@ def tcp_client(detection_enabled, detection_lock, reset_all_func, cameras, uniqu
             while running[0]:
                 data = tcp_socket.recv(1024)
                 if not data:
+                    log.info("TCP კავშირი დაიხურა სერვერის მხრიდან")
                     break
 
-                cmd = data.decode("utf-8").strip().upper()
+                cmd = data.decode("utf-8", errors="replace").strip().upper()
 
-                if cmd == "START":
-                    with detection_lock:
-                        detection_enabled[0] = True
+                # START
+                if cmd.startswith(tcp_identifier + "_START/ID="):
+                    try:
+                        train_id = cmd.split("/ID=", 1)[1].strip()
+                        log.info(f"START მიღებული → ID = {train_id}")
 
-                    reset_all_func()
-                    image_saver.clear_directory()
+                        with detection_lock:
+                            detection_enabled[0] = True
 
-                    if cameras and cameras[0].latest_frame is not None:
-                        start_recording(cameras[0].latest_frame)
+                        reset_all_func()
 
-                    log.info(">>> DETECTION STARTED <<<")
+                        if cameras and cameras[0].latest_frame is not None:
+                            # თუ გინდა ID ჩაიწეროს ფაილის სახელში → videorecorder-ში უნდა იყოს მხარდაჭერა
+                            # აქ უბრალოდ ვიწყებთ ჩაწერას (შეცვალე საჭიროებისამებრ)
+                            start_recording(cameras[0].latest_frame, f"1_{train_id}")
 
-                elif cmd == "STOP":
-                    with detection_lock:
-                        detection_enabled[0] = False
+                        log.info(">>> DETECTION STARTED <<<")
 
-                    handle_stop(
-                        detection_enabled,
-                        detection_lock,
-                        reset_all_func,
-                        cameras,
-                        unique_json_path,
-                        tcp_socket
-                    )
+                    except IndexError:
+                        log.warning(f"არასწორი START ფორმატი: {cmd}")
+
+                # STOP
+                elif cmd.startswith(tcp_identifier + "_STOP/ID="):
+                    try:
+                        train_id = cmd.split("/ID=", 1)[1].strip()
+                        log.info(f"STOP მიღებული → ID = {train_id}")
+
+                        with detection_lock:
+                            detection_enabled[0] = False
+
+                        stop_recording()
+                        log.info(">>> DETECTION STOPPED <<<")
+
+                        reset_all_func()
+
+                    except IndexError:
+                        log.warning(f"არასწორი STOP ფორმატი: {cmd}")
+
+                else:
+                    log.debug(f"უცნობი ბრძანება: {cmd!r}")
 
         except Exception as e:
-            log.error(f"TCP გაწყდა: {e}")
+            log.error(f"TCP კავშირის შეცდომა: {e}", exc_info=True)
             if tcp_socket:
-                tcp_socket.close()
+                try:
+                    tcp_socket.close()
+                except:
+                    pass
             tcp_socket = None
             time.sleep(reconnect_delay)
 
-
-def handle_stop(detection_enabled, detection_lock, reset_all_func, cameras, unique_json_path, tcp_socket):
-    stop_recording()
-    log.info(">>> DETECTION STOPPED <<<")
-
-    detection_data = []
-    for cam in cameras:
-        with cam.data_lock:
-            entry = {
-                "camera": cam.name,
-                "boxes_count": len(cam.last_boxes),
-                "timestamp": datetime.now().isoformat()
-            }
-            detection_data.append(entry)
-
-    if detection_data:
-        try:
-            with open(unique_json_path, "w", encoding="utf-8") as f:
-                json.dump(detection_data, f, ensure_ascii=False, indent=2)
-            log.info(f"JSON შენახული: {len(detection_data)}")
-        except Exception as e:
-            log.error(f"JSON შეცდომა: {e}")
-
-        if tcp_socket and tcp_socket.fileno() != -1:
-            try:
-                msg = json.dumps(detection_data, ensure_ascii=False) + "\n"
-                tcp_socket.sendall(msg.encode("utf-8"))
-                log.info("TCP: გაიგზავნა")
-            except Exception as e:
-                log.error(f"TCP გაგზავნა: {e}")
-
-    reset_all_func()
+        finally:
+            if tcp_socket:
+                try:
+                    tcp_socket.close()
+                except:
+                    pass

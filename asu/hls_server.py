@@ -22,36 +22,36 @@ log = logging.getLogger("HLS_SERVER")
 class HLSHandler(http.server.SimpleHTTPRequestHandler):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, directory="hls", **kwargs)
-    
+
     def log_message(self, format, *args):
         """HTTP ლოგების გათიშვა"""
         return  # არ გამოიტანოს HTTP ლოგები
-    
+
     def end_headers(self):
         # CORS headers დამატება
-        self.send_header('Access-Control-Allow-Origin', '*')
-        self.send_header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS')
-        self.send_header('Access-Control-Allow-Headers', 'Content-Type')
+        self.send_header("Access-Control-Allow-Origin", "*")
+        self.send_header("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
+        self.send_header("Access-Control-Allow-Headers", "Content-Type")
         # MIME ტიპების დაყენება
-        if self.path.endswith('.m3u8'):
-            self.send_header('Content-Type', 'application/vnd.apple.mpegurl')
-        elif self.path.endswith('.ts'):
-            self.send_header('Content-Type', 'video/MP2T')
+        if self.path.endswith(".m3u8"):
+            self.send_header("Content-Type", "application/vnd.apple.mpegurl")
+        elif self.path.endswith(".ts"):
+            self.send_header("Content-Type", "video/MP2T")
         super().end_headers()
-    
+
     def do_GET(self):
         try:
             # მთავარი გვერდის ჩვენება თუ მოთხოვნა ფესვზეა
-            if self.path == '/':
+            if self.path == "/":
                 self.send_response(200)
-                self.send_header('Content-type', 'text/html')
+                self.send_header("Content-type", "text/html")
                 self.end_headers()
-                
+
                 # შევამოწმოთ არსებობს თუ არა სტრიმი
                 stream_exists = os.path.exists("hls/playlist.m3u8")
                 status_text = "🟢 აქტიური" if stream_exists else "🔴 გათიშული"
                 status_color = "#d4edda" if stream_exists else "#f8d7da"
-                
+
                 html_content = f"""
 <!DOCTYPE html>
 <html>
@@ -204,16 +204,19 @@ class HLSHandler(http.server.SimpleHTTPRequestHandler):
             script.onload = function() {{
                 if (Hls.isSupported()) {{
                     const hls = new Hls({{
-                        debug: false,
+                        debug: true,                        // ჩართე დროებით, რომ კონსოლში დაინახო რა ხდება
                         enableWorker: true,
-                        lowLatencyMode: true,
-                        backBufferLength: 90,
+                        lowLatencyMode: false,              // ← ყველაზე მნიშვნელოვანი ცვლილება
+                        backBufferLength: 30,               // ან 0 თუ არ გჭირდება
                         maxBufferLength: 30,
-                        maxMaxBufferLength: 600,
+                        maxMaxBufferLength: 60,             // ან 90-120
                         liveSyncDurationCount: 3,
-                        liveMaxLatencyDurationCount: Infinity,
+                        liveMaxLatencyDurationCount: 5,     // ← დაამატე ეს, Infinity არ არის კარგი
                         liveDurationInfinity: true,
-                        preferManagedMediaSource: true
+                        preferManagedMediaSource: true,
+                        // თუ ძალიან გინდა დაბალი ლატენსი, მაგრამ სტაბილურობა:
+                        // liveSyncDurationCount: 2,
+                        // liveMaxLatencyDurationCount: 4,
                     }});
                     
                     hls.loadSource('/playlist.m3u8');
@@ -256,12 +259,12 @@ class HLSHandler(http.server.SimpleHTTPRequestHandler):
 </body>
 </html>
                 """
-                self.wfile.write(html_content.encode('utf-8'))
+                self.wfile.write(html_content.encode("utf-8"))
                 return
-            
+
             # სტანდარტული ფაილების მომსახურება
             super().do_GET()
-            
+
         except BrokenPipeError:
             # კლიენტის კავშირების გათიშვა - ნორმალური ქცევა
             pass
@@ -274,31 +277,31 @@ class HLSHandler(http.server.SimpleHTTPRequestHandler):
 def wait_for_stream():
     """ელოდებს სტრიმის გაშვებას"""
     log.info("⏳ ველოდები HLS სტრიმის გაშვებას...")
-    
+
     while True:
-        if os.path.exists("hls/playlist.m3u8"):
+        if os.path.exists("hls"+"/playlist.m3u8"):
             log.info("✅ HLS სტრიმი აღმოჩნდა!")
             return True
-        
+
         time.sleep(2)
 
 
 def start_server_in_thread():
     """სერვერის გაშვება ცალკე thread-ში"""
     port = 9091
-    
+
     try:
         with socketserver.TCPServer(("", port), HLSHandler) as httpd:
             log.info(f"🌐 HLS სერვერი გაშვებულია: http://localhost:{port}")
             log.info(f"📺 სტრიმის ნახვა: http://localhost:{port}/")
             log.info(f"🎬 პირდაპირი ბმული: http://localhost:{port}/playlist.m3u8")
-            
+
             # სტრიმის მოლოდინის გაშვება ფონში
             wait_thread = threading.Thread(target=wait_for_stream, daemon=True)
             wait_thread.start()
-            
+
             httpd.serve_forever()
-            
+
     except OSError as e:
         if e.errno == 48:  # Address already in use
             log.error(f"❌ პორტი {port} უკვე გამოიყენება!")
@@ -314,11 +317,11 @@ def start_hls_server():
     if not os.path.exists("hls"):
         os.makedirs("hls", exist_ok=True)
         log.info("📁 HLS ფოლდერი შეიქმნა")
-    
+
     # სერვერის გაშვება ცალკე thread-ში
     server_thread = threading.Thread(target=start_server_in_thread, daemon=True)
     server_thread.start()
-    
+
     log.info("🚀 HLS სერვერის thread გაშვებულია")
     return server_thread
 
@@ -326,12 +329,12 @@ def start_hls_server():
 if __name__ == "__main__":
     logging.basicConfig(
         level=logging.INFO,
-        format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-        datefmt='%H:%M:%S'
+        format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
+        datefmt="%H:%M:%S",
     )
-    
+
     start_hls_server()
-    
+
     # პროგრამის შენარჩუნება
     try:
         while True:
