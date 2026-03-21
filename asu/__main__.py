@@ -15,6 +15,7 @@ import numpy as np
 import subprocess
 from threading import Thread, Lock
 from pathlib import Path
+from .config_loader import config
 
 # ==================== OpenCV FFmpeg ====================
 os.environ["OPENCV_FFMPEG_CAPTURE_OPTIONS"] = (
@@ -44,32 +45,21 @@ log = logging.getLogger("WAGON_TRACKER")
 
 
 # ==================== CONFIG ====================
-MODEL_PATH = resource_path("best.pt")
 
 TCP_IDENTIFIER = "5"
-TCP_SERVER_IP = "192.168.1.30"
-TCP_SERVER_PORT = 45000
+
 RECONNECT_DELAY = 10
 DETECTION_EVERY_N_FRAME = 1
 
-MIN_CONFIDENCE = 0.5
-
-OBJECT_MIN_WIDTH = 300
-OBJECT_MIN_HEIGHT = 70
-
+#===========STREAMING CONFIG===========
 CAMERAS = [
     {
         "name": "cam 1",
-        "url": "rtsp://admin:@192.168.1.12:554?rtsp_transport=tcp"
+        "url": config.CAMERA_URL_1
     }
 ]
 
-HLS_DIR = "hls"
-
 HLS_PLAYLIST_NAME = "playlist.m3u8"
-
-SAVE_DIR = "number_sectors"
-
 
 # ==================== GLOBAL FLAGS ====================
 running = [True]
@@ -88,7 +78,7 @@ from ultralytics import YOLO
 
 
 # ==================== HELPERS ====================
-image_saver = ImageSaver(SAVE_DIR)
+image_saver = ImageSaver(config.SAVE_IMAGES_DIR)
 wagon_counter = WagonCounter()
 
 
@@ -103,7 +93,7 @@ class Camera:
         self.data_lock = Lock()
 
         log.info(f"[{self.name}] YOLO მოდელის ჩატვირთვა...")
-        self.model = YOLO(MODEL_PATH)
+        self.model = YOLO(config.YOLO_MODEL_PATH)
         self.model.fuse()
 
         Thread(target=self.run, daemon=True, name=f"CAM-{self.name}").start()
@@ -155,13 +145,13 @@ class Camera:
                     fc += 1
                     continue
 
-                results = self.model(frame, conf=MIN_CONFIDENCE, imgsz=640, verbose=False)[0]
+                results = self.model(frame, conf=config.OBJECT_MIN_CONFIDENCE_1, imgsz=640, verbose=False)[0]
 
                 with self.data_lock:
                     detected_objects = []
                     for box in results.boxes:
                         conf = float(box.conf.item())
-                        if conf < MIN_CONFIDENCE:
+                        if conf < config.OBJECT_MIN_CONFIDENCE_1:
                             continue
 
                         bx1, by1, bx2, by2 = map(int, box.xyxy[0])
@@ -193,8 +183,8 @@ def log_ffmpeg_stderr(proc):
 
 
 def stream_to_hls():
-    os.makedirs(HLS_DIR, exist_ok=True)
-    hls_playlist_path = os.path.join(HLS_DIR, HLS_PLAYLIST_NAME)
+
+    hls_playlist_path = os.path.join(config.HLS_DIR, HLS_PLAYLIST_NAME)
 
     command = [
         "ffmpeg", "-loglevel", "error", "-y", "-re",
@@ -219,7 +209,7 @@ def stream_to_hls():
         "-hls_delete_threshold", "3",
         "-hls_segment_type", "mpegts",
         "-strftime", "1",
-        "-hls_segment_filename", os.path.join(HLS_DIR, "seg_%Y%m%d_%H%M%S.ts"),
+        "-hls_segment_filename", os.path.join(config.HLS_DIR, "seg_%Y%m%d_%H%M%S.ts"),
         hls_playlist_path
     ]
 
@@ -275,13 +265,14 @@ def stream_to_hls():
                             width = gx2 - gx1
                             height = gy2 - gy1
 
-                            is_large_enough = width >= OBJECT_MIN_WIDTH and height >= OBJECT_MIN_HEIGHT
+                            is_large_enough = width >= config.OBJECT_MIN_WIDTH_1 and height >= config.OBJECT_MIN_HEIGHT_1
                             if is_large_enough:
                                 large_boxes.append((bx1, by1, bx2, by2, conf))
 
                             if is_large_enough:
                                 box_color = (0, 255, 0)
                                 label_color = (0, 200, 0)
+
                             else:
                                 box_color = (255, 0, 0)
                                 label_color = (255, 0, 0)
@@ -378,8 +369,8 @@ def main():
             detection_lock,
             reset_all,
             cameras,
-            TCP_SERVER_IP,
-            TCP_SERVER_PORT,
+            config.TCP_SERVER_IP,
+            config.TCP_SERVER_PORT,
             RECONNECT_DELAY,
             running
         ),

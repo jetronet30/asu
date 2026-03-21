@@ -1,0 +1,17 @@
+{
+  "TCP_SERVER_IP": "192.168.1.30",
+  "TCP_SERVER_PORT": 45000,
+  "CAMERA_URL_1": "rtsp://admin:@192.168.1.12:554",
+  "CAMERA_URL_2": "rtsp://admin:@192.168.1.13:554",
+  "SAVE_IMAGES_DIR": "number_sectors",
+  "HLS_DIR": "hls",
+  "VIDEO_ARCHIVE_DIR": "videoarchive",
+  "YOLO_MODEL_PATH": "best.pt",
+  "TROCR_MODEL_PATH": "models/trocr-large-printed",
+  "OBJECT_MIN_CONFIDENCE_1": 0.5,
+  "OBJECT_MIN_WIDTH_1": 300,
+  "OBJECT_MIN_HEIGHT_1": 70,
+  "OBJECT_MIN_CONFIDENCE_2": 0.5,
+  "OBJECT_MIN_WIDTH_2": 300,
+  "OBJECT_MIN_HEIGHT_2": 70
+}
