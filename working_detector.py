@@ -9,7 +9,14 @@ import traceback
 from collections import Counter
 import logging
 
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s | %(name)s | %(levelname)s | %(message)s"
+)
+
 log = logging.getLogger("WORKING_DETECTOR")
+
+
 
 
 class WorkingNumberDetector:
@@ -101,7 +108,7 @@ class WorkingNumberDetector:
                     pixel_values,
                     max_length=12,
                     num_beams=1,
-                    early_stopping=False
+                    early_stopping=True
                 )
                 text = self.processor.batch_decode(
                     generated_ids,
@@ -280,7 +287,6 @@ class WorkingNumberDetector:
             log.info(
                 f"ფინალური ფაილი შენახულია -> {final_results['total_wagons']} ვაგონი"
             )
-
         except Exception as e:
             log.error(f"ფაილების შენახვის შეცდომა: {e}")
 
