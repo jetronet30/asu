@@ -1,0 +1,416 @@
+{
+  "timestamp": "2026-03-29T19:10:35.937348",
+  "model": "trocr-large-printed",
+  "device": "cpu",
+  "wagons": {
+    "1": [
+      {
+        "filename": "1_sector_190834_0.82.png",
+        "confidence": 0.82,
+        "recognized_number": "76724913",
+        "source": "trocr-large-printed",
+        "is_locomotive": false
+      },
+      {
+        "filename": "1_sector_190834_0.83.png",
+        "confidence": 0.83,
+        "recognized_number": "76724913",
+        "source": "trocr-large-printed",
+        "is_locomotive": false
+      },
+      {
+        "filename": "1_sector_190834_0.84.png",
+        "confidence": 0.84,
+        "recognized_number": "76724913",
+        "source": "trocr-large-printed",
+        "is_locomotive": false
+      },
+      {
+        "filename": "1_sector_190834_0.85.png",
+        "confidence": 0.85,
+        "recognized_number": "76724913",
+        "source": "trocr-large-printed",
+        "is_locomotive": false
+      },
+      {
+        "filename": "1_sector_190835_0.83.png",
+        "confidence": 0.83,
+        "recognized_number": "76724913",
+        "source": "trocr-large-printed",
+        "is_locomotive": false
+      },
+      {
+        "filename": "1_sector_190835_0.84.png",
+        "confidence": 0.84,
+        "recognized_number": "76724913",
+        "source": "trocr-large-printed",
+        "is_locomotive": false
+      },
+      {
+        "filename": "1_sector_190835_0.85.png",
+        "confidence": 0.85,
+        "recognized_number": "76724913",
+        "source": "trocr-large-printed",
+        "is_locomotive": false
+      },
+      {
+        "filename": "1_sector_190836_0.84.png",
+        "confidence": 0.84,
+        "recognized_number": "76724913",
+        "source": "trocr-large-printed",
+        "is_locomotive": false
+      },
+      {
+        "filename": "1_sector_190836_0.85.png",
+        "confidence": 0.85,
+        "recognized_number": "76724913",
+        "source": "trocr-large-printed",
+        "is_locomotive": false
+      },
+      {
+        "filename": "1_sector_190836_0.86.png",
+        "confidence": 0.86,
+        "recognized_number": "76724913",
+        "source": "trocr-large-printed",
+        "is_locomotive": false
+      },
+      {
+        "filename": "1_sector_190837_0.84.png",
+        "confidence": 0.84,
+        "recognized_number": "161724913",
+        "source": "trocr-large-printed",
+        "is_locomotive": false
+      },
+      {
+        "filename": "1_sector_190837_0.85.png",
+        "confidence": 0.85,
+        "recognized_number": "761224913",
+        "source": "trocr-large-printed",
+        "is_locomotive": false
+      },
+      {
+        "filename": "1_sector_190837_0.86.png",
+        "confidence": 0.86,
+        "recognized_number": "76724913",
+        "source": "trocr-large-printed",
+        "is_locomotive": false
+      },
+      {
+        "filename": "1_sector_190837_0.87.png",
+        "confidence": 0.87,
+        "recognized_number": "76724913",
+        "source": "trocr-large-printed",
+        "is_locomotive": false
+      },
+      {
+        "filename": "1_sector_190838_0.84.png",
+        "confidence": 0.84,
+        "recognized_number": "16724913",
+        "source": "trocr-large-printed",
+        "is_locomotive": false
+      },
+      {
+        "filename": "1_sector_190838_0.86.png",
+        "confidence": 0.86,
+        "recognized_number": "76724913",
+        "source": "trocr-large-printed",
+        "is_locomotive": false
+      },
+      {
+        "filename": "1_sector_190839_0.84.png",
+        "confidence": 0.84,
+        "recognized_number": "76724913",
+        "source": "trocr-large-printed",
+        "is_locomotive": false
+      }
+    ],
+    "2": [
+      {
+        "filename": "2_sector_190848_0.86.png",
+        "confidence": 0.86,
+        "recognized_number": "76728088",
+        "source": "trocr-large-printed",
+        "is_locomotive": false
+      },
+      {
+        "filename": "2_sector_190849_0.84.png",
+        "confidence": 0.84,
+        "recognized_number": "76728088",
+        "source": "trocr-large-printed",
+        "is_locomotive": false
+      },
+      {
+        "filename": "2_sector_190849_0.85.png",
+        "confidence": 0.85,
+        "recognized_number": "76728088",
+        "source": "trocr-large-printed",
+        "is_locomotive": false
+      },
+      {
+        "filename": "2_sector_190849_0.86.png",
+        "confidence": 0.86,
+        "recognized_number": "76728088",
+        "source": "trocr-large-printed",
+        "is_locomotive": false
+      },
+      {
+        "filename": "2_sector_190850_0.85.png",
+        "confidence": 0.85,
+        "recognized_number": "76728088",
+        "source": "trocr-large-printed",
+        "is_locomotive": false
+      },
+      {
+        "filename": "2_sector_190850_0.86.png",
+        "confidence": 0.86,
+        "recognized_number": "76728088",
+        "source": "trocr-large-printed",
+        "is_locomotive": false
+      },
+      {
+        "filename": "2_sector_190851_0.84.png",
+        "confidence": 0.84,
+        "recognized_number": "76728088",
+        "source": "trocr-large-printed",
+        "is_locomotive": false
+      },
+      {
+        "filename": "2_sector_190851_0.85.png",
+        "confidence": 0.85,
+        "recognized_number": "76728088",
+        "source": "trocr-large-printed",
+        "is_locomotive": false
+      },
+      {
+        "filename": "2_sector_190851_0.86.png",
+        "confidence": 0.86,
+        "recognized_number": "76728088",
+        "source": "trocr-large-printed",
+        "is_locomotive": false
+      }
+    ],
+    "3": [
+      {
+        "filename": "3_sector_190902_0.85.png",
+        "confidence": 0.85,
+        "recognized_number": "76728104",
+        "source": "trocr-large-printed",
+        "is_locomotive": false
+      },
+      {
+        "filename": "3_sector_190902_0.86.png",
+        "confidence": 0.86,
+        "recognized_number": "76728104",
+        "source": "trocr-large-printed",
+        "is_locomotive": false
+      },
+      {
+        "filename": "3_sector_190903_0.85.png",
+        "confidence": 0.85,
+        "recognized_number": "76728104",
+        "source": "trocr-large-printed",
+        "is_locomotive": false
+      },
+      {
+        "filename": "3_sector_190903_0.86.png",
+        "confidence": 0.86,
+        "recognized_number": "76728104",
+        "source": "trocr-large-printed",
+        "is_locomotive": false
+      },
+      {
+        "filename": "3_sector_190904_0.85.png",
+        "confidence": 0.85,
+        "recognized_number": "76728104",
+        "source": "trocr-large-printed",
+        "is_locomotive": false
+      },
+      {
+        "filename": "3_sector_190904_0.86.png",
+        "confidence": 0.86,
+        "recognized_number": "76728104",
+        "source": "trocr-large-printed",
+        "is_locomotive": false
+      },
+      {
+        "filename": "3_sector_190904_0.87.png",
+        "confidence": 0.87,
+        "recognized_number": "76728104",
+        "source": "trocr-large-printed",
+        "is_locomotive": false
+      },
+      {
+        "filename": "3_sector_190904_0.88.png",
+        "confidence": 0.88,
+        "recognized_number": "76728104",
+        "source": "trocr-large-printed",
+        "is_locomotive": false
+      }
+    ],
+    "4": [
+      {
+        "filename": "4_sector_190915_0.86.png",
+        "confidence": 0.86,
+        "recognized_number": "76728252",
+        "source": "trocr-large-printed",
+        "is_locomotive": false
+      },
+      {
+        "filename": "4_sector_190916_0.84.png",
+        "confidence": 0.84,
+        "recognized_number": "76728252",
+        "source": "trocr-large-printed",
+        "is_locomotive": false
+      },
+      {
+        "filename": "4_sector_190916_0.85.png",
+        "confidence": 0.85,
+        "recognized_number": "76728252",
+        "source": "trocr-large-printed",
+        "is_locomotive": false
+      },
+      {
+        "filename": "4_sector_190916_0.86.png",
+        "confidence": 0.86,
+        "recognized_number": "76728252",
+        "source": "trocr-large-printed",
+        "is_locomotive": false
+      },
+      {
+        "filename": "4_sector_190916_0.87.png",
+        "confidence": 0.87,
+        "recognized_number": "76728252",
+        "source": "trocr-large-printed",
+        "is_locomotive": false
+      },
+      {
+        "filename": "4_sector_190917_0.85.png",
+        "confidence": 0.85,
+        "recognized_number": "76728252",
+        "source": "trocr-large-printed",
+        "is_locomotive": false
+      },
+      {
+        "filename": "4_sector_190917_0.86.png",
+        "confidence": 0.86,
+        "recognized_number": "76728252",
+        "source": "trocr-large-printed",
+        "is_locomotive": false
+      },
+      {
+        "filename": "4_sector_190918_0.85.png",
+        "confidence": 0.85,
+        "recognized_number": "76728252",
+        "source": "trocr-large-printed",
+        "is_locomotive": false
+      },
+      {
+        "filename": "4_sector_190918_0.86.png",
+        "confidence": 0.86,
+        "recognized_number": "76728252",
+        "source": "trocr-large-printed",
+        "is_locomotive": false
+      },
+      {
+        "filename": "4_sector_190919_0.85.png",
+        "confidence": 0.85,
+        "recognized_number": "76728252",
+        "source": "trocr-large-printed",
+        "is_locomotive": false
+      },
+      {
+        "filename": "4_sector_190919_0.86.png",
+        "confidence": 0.86,
+        "recognized_number": "76728252",
+        "source": "trocr-large-printed",
+        "is_locomotive": false
+      },
+      {
+        "filename": "4_sector_190919_0.87.png",
+        "confidence": 0.87,
+        "recognized_number": "76728252",
+        "source": "trocr-large-printed",
+        "is_locomotive": false
+      }
+    ],
+    "5": [
+      {
+        "filename": "5_sector_190930_0.85.png",
+        "confidence": 0.85,
+        "recognized_number": "76728286",
+        "source": "trocr-large-printed",
+        "is_locomotive": false
+      },
+      {
+        "filename": "5_sector_190930_0.86.png",
+        "confidence": 0.86,
+        "recognized_number": "76728286",
+        "source": "trocr-large-printed",
+        "is_locomotive": false
+      },
+      {
+        "filename": "5_sector_190931_0.84.png",
+        "confidence": 0.84,
+        "recognized_number": "76728286",
+        "source": "trocr-large-printed",
+        "is_locomotive": false
+      },
+      {
+        "filename": "5_sector_190931_0.85.png",
+        "confidence": 0.85,
+        "recognized_number": "76728286",
+        "source": "trocr-large-printed",
+        "is_locomotive": false
+      },
+      {
+        "filename": "5_sector_190931_0.86.png",
+        "confidence": 0.86,
+        "recognized_number": "76728286",
+        "source": "trocr-large-printed",
+        "is_locomotive": false
+      },
+      {
+        "filename": "5_sector_190932_0.85.png",
+        "confidence": 0.85,
+        "recognized_number": "76728286",
+        "source": "trocr-large-printed",
+        "is_locomotive": false
+      },
+      {
+        "filename": "5_sector_190932_0.86.png",
+        "confidence": 0.86,
+        "recognized_number": "76728286",
+        "source": "trocr-large-printed",
+        "is_locomotive": false
+      },
+      {
+        "filename": "5_sector_190933_0.84.png",
+        "confidence": 0.84,
+        "recognized_number": "76728286",
+        "source": "trocr-large-printed",
+        "is_locomotive": false
+      },
+      {
+        "filename": "5_sector_190933_0.85.png",
+        "confidence": 0.85,
+        "recognized_number": "76728286",
+        "source": "trocr-large-printed",
+        "is_locomotive": false
+      },
+      {
+        "filename": "5_sector_190933_0.86.png",
+        "confidence": 0.86,
+        "recognized_number": "76728286",
+        "source": "trocr-large-printed",
+        "is_locomotive": false
+      },
+      {
+        "filename": "5_sector_190933_0.88.png",
+        "confidence": 0.88,
+        "recognized_number": "76728286",
+        "source": "trocr-large-printed",
+        "is_locomotive": false
+      }
+    ]
+  }
+}
