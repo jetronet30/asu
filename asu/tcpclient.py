@@ -1,7 +1,8 @@
 import socket
 import time
 import logging
-
+from pathlib import Path
+from.config_loader import config
 log = logging.getLogger("WAGON_TRACKER")
 
 from .videorecorder import start_recording, stop_recording
@@ -46,9 +47,17 @@ def tcp_client(tcp_identifier, detection_enabled, detection_lock, reset_all_func
                             # აქ უბრალოდ ვიწყებთ ჩაწერას (შეცვალე საჭიროებისამებრ)
                             start_recording(cameras[0].latest_frame, f"1_{train_id}")
 
+
+
+                        folder = Path(config.SAVE_IMAGES_DIR)
+                        for file in folder.glob("*.png"):
+                            file.unlink()
+
+                            
+
                         log.info(">>> DETECTION STARTED <<<")
 
-                    except IndexError:
+                    except Exception:
                         log.warning(f"არასწორი START ფორმატი: {cmd}")
 
                 # STOP
@@ -65,7 +74,7 @@ def tcp_client(tcp_identifier, detection_enabled, detection_lock, reset_all_func
 
                         reset_all_func()
 
-                    except IndexError:
+                    except Exception:
                         log.warning(f"არასწორი STOP ფორმატი: {cmd}")
 
                 else:

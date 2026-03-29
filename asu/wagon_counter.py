@@ -5,7 +5,7 @@ class WagonCounter:
         self.wagon_number = 0
         self.object_present = False
         self.no_object_frames = 0
-        self.no_object_threshold = 8
+        self.no_object_threshold = 12
 
     def update_detection(self, current_detected):
         """ანახლებს დეტექციის სტატუსს და აბრუნებს მიმდინარე ნომერს"""

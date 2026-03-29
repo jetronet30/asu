@@ -1,30 +1,20 @@
 {
-  "total_wagons": 5,
+  "total_wagons": 3,
   "wagons": [
     {
       "row": 1,
-      "number": "76724913",
-      "quality": "100.0"
+      "number": "64451214",
+      "quality": "87.0"
     },
     {
       "row": 2,
-      "number": "76728088",
-      "quality": "98.0"
+      "number": "55469258",
+      "quality": "95.0"
     },
     {
       "row": 3,
-      "number": "76728104",
-      "quality": "98.0"
-    },
-    {
-      "row": 4,
-      "number": "76728252",
-      "quality": "98.0"
-    },
-    {
-      "row": 5,
-      "number": "76728286",
-      "quality": "98.0"
+      "number": "64438211",
+      "quality": "63.0"
     }
   ]
 }

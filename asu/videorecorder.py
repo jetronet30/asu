@@ -2,10 +2,10 @@ import subprocess
 from datetime import datetime
 from pathlib import Path
 import logging
-
+from .config_loader import config
 log = logging.getLogger("WAGON_TRACKER")
 
-archive_dir = Path("videoarchive")
+archive_dir = Path(config.VIDEO_ARCHIVE_DIR)
 archive_dir.mkdir(exist_ok=True)
 
 video_writer = None
